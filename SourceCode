@@ -1,0 +1,62 @@
+#include<iostream>
+#include<stdlib.h>
+#include<time.h>
+using namespace std;
+bool gameOver=false;
+string question, answer;
+int score=0, lives=3, timeStart;
+
+void playArea(){
+	cout << "Score : " << score;
+	cout << "       ";
+	cout << "Lives : ";
+	for(int i=0; i<lives; i++) cout << char(3);
+	cout << endl << "Time : " << timeStart+60-time(NULL) << "s\n";
+	cout << "--------------------------" << endl;
+}
+void generateQuestion(){
+	question="";
+	srand(time(NULL));
+	question+=char((time(NULL)%26)+97);
+	question+=char((rand()%26)+97);
+	question+=char(((time(NULL)+14)%26)+97);
+	question+=char(((rand()-4)%26)+97);
+	question+=char(((time(NULL)-6)%26)+97);
+	question+=char((rand()*19%26)+97);
+	question+=char(((time(NULL)*2)%26)+97);
+	playArea();
+	cout << question << endl;
+}
+
+int checkAnswer(){
+	cin >> answer;
+	if(answer==question){
+		score++;
+		system("cls");
+		return 0;
+	}
+	else{
+		system("cls");
+		lives--;
+		if(lives==0){
+			gameOver = true;
+			return 0;
+		}
+		playArea();
+		cout << question << endl;
+		checkAnswer();
+	}
+}
+
+int main(){
+	timeStart = time(NULL);
+	
+	while(gameOver == false){
+		generateQuestion();
+		checkAnswer();
+		if(time(NULL) - timeStart>=60) gameOver = true;
+	}
+	
+	system("cls");
+	cout << "Your Score : " << score << endl;
+}
